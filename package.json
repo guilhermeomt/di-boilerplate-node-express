@@ -1,6 +1,6 @@
 {
   "name": "di-boilerplate-node-express",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/guilhermeomt/di-boilerplate-node-express.git",
   "author": "Guilherme Tavares <contato@guilhermeomt.dev>",
@@ -8,7 +8,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "npm run build && node dist/server.js",
-    "dev": "npm run build && nodemon -q dist/server.js"
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.1.2",

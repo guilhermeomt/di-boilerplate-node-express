@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "name": "John Doe",
+    "email": "doe@gmail.com",
+    "phone": "1234567890",
+    "address": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10001",
+    "country": "USA",
+    "created_at": "2017-01-01 00:00:00",
+    "updated_at": "2017-01-01 00:00:00",
+    "password": "123456"
+  },
+  {
+    "id": 2,
+    "name": "Jane Doe",
+    "email": "jane@gmail.com",
+    "phone": "1234567890",
+    "address": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "zip": "10001",
+    "country": "USA",
+    "created_at": "2017-01-01 00:00:00",
+    "updated_at": "2017-01-01 00:00:00",
+    "password": "12345678"
+  }
+]

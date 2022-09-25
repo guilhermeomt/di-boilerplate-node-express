@@ -4,8 +4,6 @@
 
 ## 1. Introdução
 
-Este boilerplate foi criado para facilitar a criação de novos projetos Node.js.
-
 ## 2. Como executar
 
 Em breve...
