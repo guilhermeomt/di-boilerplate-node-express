@@ -1,6 +1,8 @@
-import { User } from '@server/models/user.model';
 import { readFileSync } from 'fs';
 import { resolve } from 'path';
+import { injectable } from 'inversify';
+import { User } from '../models/user.model';
+import { CRUD } from './interfaces/crud.interface';
 
 const data = readFileSync(
   resolve(__dirname, '..', 'data', 'users.json'),
@@ -9,16 +11,17 @@ const data = readFileSync(
 
 const users: User[] = JSON.parse(data);
 
-export class UsersRepository {
-  public getAll() {
+@injectable()
+export class UsersRepository implements CRUD<User> {
+  public async getAll() {
     return users;
   }
 
-  public getById(id: number) {
+  public async getById(id: number) {
     return users.find((user) => user.id === id);
   }
 
-  public getByEmail(email: string) {
+  public async getByEmail(email: string) {
     return users.find((user) => user.email === email);
   }
 }

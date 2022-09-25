@@ -1,37 +1,30 @@
-import { ApplicationError } from '@server/exceptions/application.error';
-import { Router, Request, Response } from 'express';
+import TYPES from '../types';
+import { inject } from 'inversify';
+import {
+  httpGet,
+  BaseHttpController,
+  interfaces,
+  controller,
+} from 'inversify-express-utils';
 import { UsersService } from '../services/users.service';
+import { ApplicationError } from '../exceptions/application.error';
 
-export class UsersController {
-  private path = '/users';
-  public router: Router = Router();
-
-  constructor(private usersService: UsersService) {
-    this.initializeRoutes();
+@controller('/users')
+export class UsersController
+  extends BaseHttpController
+  implements interfaces.Controller
+{
+  constructor(@inject(TYPES.UsersService) private usersService: UsersService) {
+    super();
   }
 
-  private getAllUsers = async (_req: Request, res: Response) => {
+  @httpGet('/')
+  public async index(): Promise<interfaces.IHttpActionResult> {
     try {
       const users = await this.usersService.getAllUsers();
-      res.status(200).send(users);
+      return this.ok(users);
     } catch (err: ApplicationError | any) {
-      res.status(err.statusCode || 500).send({ message: err.message });
+      return this.json({ message: err.message }, err.statusCode);
     }
-  };
-
-  private getUserById = async (req: Request, res: Response) => {
-    try {
-      const user = await this.usersService.getUserById(req.params.id);
-      res.status(200).send(user);
-    } catch (err: ApplicationError | any) {
-      console.log(err);
-      res.status(err.statusCode || 500).send({ message: err.message });
-    }
-  };
-
-  public initializeRoutes() {
-    this.router.get(this.path, this.getAllUsers);
-    this.router.get(`${this.path}/:id`, this.getUserById);
-    return this.router;
   }
 }

@@ -1,13 +1,13 @@
-import server from './app';
+import { AppBootstrap } from './app';
 
-const PORT = process.env.PORT || 3001;
+const app = new AppBootstrap();
 
 try {
-  server.listen(PORT, (): void => {
-    console.log(`Server running successfully on port ${PORT}`);
+  app.server.build().listen(app.port, () => {
+    console.log(`Server is running on port ${app.port}`);
   });
 } catch (error: any) {
-  console.error(`Error occured: ${error.message}`);
+  console.error(`Error occurred: ${error.message}`);
 }
 
 process.on('unhandledRejection', (err: Error) => {

@@ -1,27 +1,41 @@
 import { AuthService } from '../services/auth.service';
-import { Router, Request, Response } from 'express';
+import { inject } from 'inversify';
+import {
+  httpPost,
+  BaseHttpController,
+  interfaces,
+  controller,
+} from 'inversify-express-utils';
 import { ApplicationError } from '../exceptions/application.error';
+import TYPES from '../types';
 
-export class AuthController {
-  private path = '/auth';
-  public router: Router = Router();
-
-  constructor(private authService: AuthService) {
-    this.initializeRoutes();
+@controller('/auth')
+export class AuthController
+  extends BaseHttpController
+  implements interfaces.Controller
+{
+  constructor(@inject(TYPES.AuthService) private authService: AuthService) {
+    super();
   }
 
-  private login = async (req: Request, res: Response) => {
-    try {
-      const { email, password } = req.body;
-      const user = await this.authService.login(email, password);
-      res.status(200).send(user);
-    } catch (err: ApplicationError | any) {
-      res.status(err.statusCode || 500).send({ message: err.message });
-    }
-  };
+  @httpPost('/login')
+  public async index(): Promise<interfaces.IHttpActionResult> {
+    const { email, password } = this.httpContext.request.body;
 
-  public initializeRoutes() {
-    this.router.get(`${this.path}/login`, this.login);
-    return this.router;
+    if (!email || !password) {
+      return this.json({ message: 'Email and password are required' }, 400);
+    }
+
+    try {
+      const user = await this.authService.login(email, password);
+      return this.ok(user);
+    } catch (err: ApplicationError | any) {
+      return this.json(
+        {
+          message: err.message,
+        },
+        err.statusCode,
+      );
+    }
   }
 }
